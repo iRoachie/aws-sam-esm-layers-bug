@@ -1,0 +1,38 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  layers-bug
+
+  Sample SAM Template for layers-bug
+
+Globals:
+  Function:
+    Timeout: 3
+
+Resources:
+  NanoLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      ContentUri: ./nanoid
+
+  CJSFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: hello-world/
+      Handler: cjs.lambdaHandler
+      Runtime: nodejs14.x
+      Architectures:
+        - x86_64
+      Layers:
+        - !Ref NanoLayer
+
+  ESMFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: hello-world/
+      Handler: esm.lambdaHandler
+      Runtime: nodejs14.x
+      Architectures:
+        - x86_64
+      Layers:
+        - !Ref NanoLayer
